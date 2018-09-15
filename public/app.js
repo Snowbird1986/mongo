@@ -36,21 +36,34 @@ $.get("/scrape").then(function(data) {
       .then(function(data) {
         console.log(data);
         // The title of the article
-        $("#notes").append("<h2>" + data.title + "</h2>");
+        $("#notes").append("<h2>" + data.title + "</h2><br>");
+        if (data.note[0]) {
+          $("#notes").append("<h4>Prior Comments</h4><br>");
+          for(j=0;j<data.note.length;j++){
+          console.log(j)
+          console.log(data.note[j].title)
+          console.log(data.note[j].body)
+          $("#notes").append("<div id='priorNoteTitle"+j+"' class='priorcommentstitle'></div><br>");
+          $("#priorNoteTitle"+j).text(data.note[j].title)
+          $("#notes").append("<div id='priorNoteBody"+j+"' class='priorcommentsbody'></div><br>");
+          $("#priorNoteBody"+j).text(data.note[j].body);
+          $("#notes").append("<button data-id='" + data._id + "' id='deletenote'>Delete Note</button><br>");
+          }}
+        $("#notes").append("<br><h4>New Comments</h4><br>");
         // An input to enter a new title
-        $("#notes").append("<input id='titleinput' name='title' >");
+        $("#notes").append("<input id='titleinput' name='title' ><br>");
         // A textarea to add a new note body
-        $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+        $("#notes").append("<textarea id='bodyinput' name='body'></textarea><br>");
         // A button to submit a new note, with the id of the article saved to it
-        $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+        $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button><br>");
   
         // If there's a note in the article
-        if (data.note) {
+        // if (data.note) {
           // Place the title of the note in the title input
-          $("#titleinput").val(data.note.title);
+          // $("#titleinput").val(data.note.title);
           // Place the body of the note in the body textarea
-          $("#bodyinput").val(data.note.body);
-        }
+          // $("#bodyinput").val(data.note.body);
+        // }
       });
   });
   
