@@ -34,7 +34,7 @@ mongoose.connect(MONGODB_URI);
 // Routes
 
 // A GET route for scraping the echoJS website
-app.get("/", function(req, res) {
+app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
   db.Article.find({}).then(function(dbArticle) {
       // If all Notes are successfully found, send them back to the client

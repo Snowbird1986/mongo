@@ -1,4 +1,4 @@
-$.get("/").then(function(data) {
+$.get("/scrape").then(function(data) {
   console.log(data)
   $.getJSON("/articles", function(data) {
     // For each one
