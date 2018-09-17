@@ -102,7 +102,7 @@ app.get("/articles", function(req, res) {
   // console.log(res)
   // TODO: Finish the route so it grabs all of the articles
   db.Article.find({})
-    .sort({dateAdded: 1})
+    .sort({dateAdded: -1})
     .then(function(dbArticle) {
       // If all Notes are successfully found, send them back to the client
       // console.log(res.json(dbArticle))
