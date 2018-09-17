@@ -34,8 +34,17 @@ mongoose.connect("mongodb://localhost/mongohomework");
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
-  db.Article.remove({}).then(function(){
-    db.Note.remove({}).then(function(){
+  db.Article.find({}).then(function(dbArticle) {
+      // If all Notes are successfully found, send them back to the client
+      priorTitles = []
+      // res.json(dbArticle);
+      for (k=0;k<dbArticle.length;k++){
+        oldTitle = dbArticle[k].title
+        priorTitles.push(oldTitle)
+      }
+      // console.log(dbArticle);
+  // db.Article.remove({}).then(function(){
+    // db.Note.remove({}).then(function(){
       axios.get("http://www.espn.com/nfl/team/_/name/kc/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
@@ -58,30 +67,43 @@ app.get("/scrape", function(req, res) {
             .text();
 
           // Create a new Article using the `result` object built from scraping
-          db.Article.create(result)
-            .then(function(dbArticle) {
-              // View the added result in the console
-              console.log(dbArticle);
-            })
-            .catch(function(err) {
-              // If an error occurred, send it to the client
-              return res.json(err);
-            });
+          // console.log(result.title)
+          // console.log(priorTitles)
+          // console.log(priorTitles.indexOf(result.title))
+          if(priorTitles.indexOf(result.title)==-1){
+            db.Article.create(result)
+              .then(function(dbArticle) {
+                // View the added result in the console
+                // console.log(dbArticle);
+              })
+              .catch(function(err) {
+                // If an error occurred, send it to the client
+                return res.json(err);
+              });
+            }
         });
 
         // If we were able to successfully scrape and save an Article, send a message to the client
         res.send("Scrape Complete");
       });
-    });
+    })
+  .catch(function(err) {
+    // If an error occurs, send the error back to the client
+    res.json(err);
   });
 });
+  // });
+// });
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
+  // console.log(res)
   // TODO: Finish the route so it grabs all of the articles
   db.Article.find({})
+    .sort({dateAdded: 1})
     .then(function(dbArticle) {
       // If all Notes are successfully found, send them back to the client
+      // console.log(res.json(dbArticle))
       res.json(dbArticle);
     })
     .catch(function(err) {
@@ -123,6 +145,21 @@ app.post("/articles/:id", function(req, res) {
   .then(function(dbArticle) {
     // If the User was updated successfully, send it back to the client
     res.json(dbArticle);
+  })
+  .catch(function(err) {
+    // If an error occurs, send it back to the client
+    res.json(err);
+  });
+});
+app.post("/articles/remove/:id", function(req, res) {
+  // TODO
+  // ====
+  // save the new note that gets posted to the Notes collection
+  // then find an article from the req.params.id
+  // and update it's "note" property with the _id of the new note
+  db.Note.findOneAndRemove({_id: req.params.id}).then(function(dbNote) {
+    // If the User was updated successfully, send it back to the client
+    res.json(dbNote);
   })
   .catch(function(err) {
     // If an error occurs, send it back to the client

@@ -1,4 +1,8 @@
-body { background-color: #F2F6D0 }
+body { 
+  background-image: url(./images/cheifsbody.jpg); 
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 #wrapper {
   /* width: 960px; */
   margin-left: auto;
@@ -10,6 +14,7 @@ body { background-color: #F2F6D0 }
   overflow: auto;
   width: 60%;
   height: 700px;
+  background-color: whitesmoke
   /* border-bottom:solid 2px black */
 }
 .articleBlock {
@@ -22,6 +27,7 @@ hr {
   float: right;
   width: 30%;
   overflow: auto;
+  background-color:darkgoldenrod
 }
 textarea, input {
   display: block;
@@ -49,4 +55,10 @@ textarea {
   background-color:#FCF5C7;
   border:solid 1px black;
   overflow: auto;
+}
+.jumbotron {
+  background-image: url(./images/cheifs.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 225px
 }
